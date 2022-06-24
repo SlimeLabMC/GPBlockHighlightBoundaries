@@ -1,5 +1,6 @@
 package com.github.gpaddons.blockhighlightboundaries;
 
+import com.github.gpaddons.blockhighlightboundaries.compat.FloodgateCompat;
 import com.github.gpaddons.blockhighlightboundaries.impl.packetevents1.PacketEvents1Provider;
 import com.github.gpaddons.blockhighlightboundaries.impl.packetevents2.PacketEvents2Provider;
 import com.github.gpaddons.blockhighlightboundaries.impl.protocollib.ProtocolLibProvider;
@@ -20,12 +21,14 @@ public class GPBlockHighlightBoundaries extends JavaPlugin implements Listener
 
   private final @NotNull PluginHighlightConfiguration configuration = new PluginHighlightConfiguration(this);
   private final @NotNull PluginTeamManager teamManager = new PluginTeamManager(this, configuration);
+  private FloodgateCompat floodgateCompat;
   private @Nullable VisualizationProvider provider;
 
   @Override
   public void onEnable() {
     saveDefaultConfig();
     provider = getProvider();
+    floodgateCompat = new FloodgateCompat(this);
     if (provider == null) {
       getLogger().warning("No eligible provider found!");
       getLogger().warning("Please install ProtocolLib or PacketEvents and restart your server.");
@@ -41,7 +44,7 @@ public class GPBlockHighlightBoundaries extends JavaPlugin implements Listener
   @EventHandler
   private void onVisualize(@NotNull BoundaryVisualizationEvent event)
   {
-    if (provider != null) {
+    if (!floodgateCompat.isBedrock(event.getPlayer()) && provider != null) {
       event.setProvider(provider);
     }
   }

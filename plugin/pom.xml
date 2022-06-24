@@ -47,6 +47,14 @@
       <groupId>com.github.TechFortress</groupId>
       <artifactId>GriefPrevention</artifactId>
     </dependency>
+    <dependency>
+      <groupId>com.github.jikoo</groupId>
+      <artifactId>planarwrappers</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.geysermc.floodgate</groupId>
+      <artifactId>api</artifactId>
+    </dependency>
   </dependencies>
 
   <build>
@@ -73,6 +81,7 @@
           <target>16</target>
         </configuration>
       </plugin>
+
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-shade-plugin</artifactId>
@@ -86,7 +95,25 @@
           </execution>
         </executions>
         <configuration>
+          <relocations>
+            <relocation>
+              <pattern>com.github.jikoo.planarwrappers</pattern>
+              <shadedPattern>com.github.gpaddons.blockhighlightboundaries.planarwrappers</shadedPattern>
+            </relocation>
+          </relocations>
           <filters>
+            <filter>
+              <artifact>com.github.jikoo:planarwrappers</artifact>
+              <includes>
+                <include>com/github/jikoo/planarwrappers/service/ProvidedService.class</include>
+                <include>com/github/jikoo/planarwrappers/service/ProvidedService$Wrapper.class</include>
+                <include>com/github/jikoo/planarwrappers/event/ConsumerEventExecutor.class</include>
+                <include>com/github/jikoo/planarwrappers/event/Event$1.class</include>
+                <include>com/github/jikoo/planarwrappers/event/Event.class</include>
+                <include>com/github/jikoo/planarwrappers/event/KeyedListener$1.class</include>
+                <include>com/github/jikoo/planarwrappers/event/KeyedListener.class</include>
+              </includes>
+            </filter>
             <filter>
               <artifact>**:*</artifact>
               <excludes>
